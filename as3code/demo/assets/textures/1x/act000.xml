@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:07eb2431c8c31394dae08f50175e450d$ -->
+<TextureAtlas imagePath="act000.png">
+    <SubTexture name="act000/0000" x="2" y="2" width="70" height="96" frameX="0" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0001" x="2" y="2" width="70" height="96" frameX="0" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0002" x="144" y="2" width="68" height="94" frameX="0" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0003" x="144" y="2" width="68" height="94" frameX="0" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0004" x="70" y="196" width="66" height="94" frameX="-1" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0005" x="70" y="196" width="66" height="94" frameX="-1" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0006" x="68" y="384" width="64" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0007" x="68" y="384" width="64" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0008" x="140" y="192" width="66" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0009" x="140" y="192" width="66" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0010" x="2" y="194" width="66" height="94" frameX="-2" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0011" x="2" y="194" width="66" height="94" frameX="-2" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0012" x="2" y="100" width="68" height="92" frameX="-2" frameY="-2" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0013" x="2" y="100" width="68" height="92" frameX="-2" frameY="-2" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0014" x="144" y="98" width="68" height="92" frameX="-2" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0015" x="144" y="98" width="68" height="92" frameX="-2" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0016" x="2" y="290" width="66" height="92" frameX="-3" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0017" x="2" y="290" width="66" height="92" frameX="-3" frameY="-1" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0018" x="2" y="384" width="64" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0019" x="2" y="384" width="64" height="94" frameX="-3" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0020" x="72" y="100" width="66" height="94" frameX="-1" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0021" x="72" y="100" width="66" height="94" frameX="-1" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0022" x="74" y="2" width="68" height="96" frameX="0" frameY="0" frameWidth="550" frameHeight="400"/>
+    <SubTexture name="act000/0023" x="74" y="2" width="68" height="96" frameX="0" frameY="0" frameWidth="550" frameHeight="400"/>
+</TextureAtlas>

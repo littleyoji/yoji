@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:00b4de19b6966eb04bbf5835b740fe11$ -->
+<TextureAtlas imagePath="bettleUI.png">
+    <SubTexture name="cube0" x="385" y="47" width="39" height="43" frameX="-2" frameY="0" frameWidth="43" frameHeight="43"/>
+    <SubTexture name="cube1" x="385" y="2" width="41" height="43" frameX="-1" frameY="0" frameWidth="43" frameHeight="43"/>
+    <SubTexture name="cube2" x="426" y="47" width="37" height="43" frameX="-4" frameY="0" frameWidth="43" frameHeight="43"/>
+    <SubTexture name="cube3" x="469" y="2" width="39" height="43" frameX="-2" frameY="0" frameWidth="43" frameHeight="43"/>
+    <SubTexture name="cube4" x="428" y="2" width="39" height="43" frameX="-2" frameY="0" frameWidth="43" frameHeight="43"/>
+    <SubTexture name="frame" x="2" y="201" width="380" height="380"/>
+    <SubTexture name="ground" x="2" y="2" width="381" height="197"/>
+</TextureAtlas>

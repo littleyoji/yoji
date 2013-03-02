@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:57408f6692d5c13c626a8485376aca8d$ -->
+<TextureAtlas imagePath="act113.png">
+    <SubTexture name="act113/0000" x="38" y="284" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0001" x="38" y="284" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0002" x="74" y="248" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0003" x="74" y="248" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0004" x="192" y="232" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0005" x="192" y="232" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0006" x="156" y="232" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0007" x="156" y="232" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0008" x="120" y="194" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0009" x="120" y="194" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0010" x="2" y="272" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0011" x="2" y="272" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0012" x="38" y="230" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0013" x="38" y="230" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0014" x="84" y="194" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0015" x="84" y="194" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0016" x="212" y="178" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0017" x="212" y="178" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0018" x="176" y="178" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0019" x="176" y="178" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0020" x="2" y="218" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0021" x="2" y="218" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0022" x="48" y="176" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0023" x="48" y="176" width="34" height="52" frameX="-27" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0024" x="140" y="136" width="34" height="56" frameX="-27" frameY="-18" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0025" x="140" y="136" width="34" height="56" frameX="-27" frameY="-18" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0026" x="104" y="136" width="34" height="56" frameX="-27" frameY="-18" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0027" x="104" y="136" width="34" height="56" frameX="-27" frameY="-18" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0028" x="182" y="128" width="40" height="48" frameX="-27" frameY="-25" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0029" x="182" y="128" width="40" height="48" frameX="-27" frameY="-25" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0030" x="2" y="172" width="44" height="44" frameX="-38" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0031" x="58" y="130" width="44" height="44" frameX="-40" frameY="-22" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0032" x="126" y="88" width="54" height="46" frameX="-38" frameY="-24" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0033" x="2" y="124" width="54" height="46" frameX="-40" frameY="-24" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0034" x="2" y="46" width="62" height="42" frameX="-34" frameY="-30" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0035" x="130" y="2" width="62" height="42" frameX="-37" frameY="-30" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0036" x="130" y="46" width="60" height="40" frameX="-42" frameY="-35" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0037" x="194" y="44" width="60" height="40" frameX="-44" frameY="-35" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0038" x="66" y="88" width="58" height="40" frameX="-47" frameY="-35" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0039" x="192" y="86" width="58" height="40" frameX="-49" frameY="-35" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0040" x="66" y="2" width="62" height="42" frameX="-47" frameY="-27" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0041" x="2" y="2" width="62" height="42" frameX="-49" frameY="-27" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0042" x="66" y="46" width="62" height="40" frameX="-52" frameY="-37" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0043" x="194" y="2" width="60" height="40" frameX="-56" frameY="-37" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0044" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0045" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0046" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0047" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0048" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0049" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0050" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0051" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0052" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0053" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0054" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0055" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0056" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0057" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0058" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0059" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0060" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+    <SubTexture name="act113/0061" x="2" y="90" width="58" height="32" frameX="-59" frameY="-45" frameWidth="120" frameHeight="80"/>
+</TextureAtlas>
