@@ -9,6 +9,8 @@ package maingame.scene.view
 
 	public class BijouView extends Sprite
 	{
+		public static var CUBE_WIDTH:Number = 45;
+		public static var CUBE_HEIGHT:Number = 45;
 		/**
 		 * 该宝石对应的数据 
 		 */		
@@ -17,6 +19,13 @@ package maingame.scene.view
 		 * 该宝石对应贴图 
 		 */		
 		private var _image:Image;
+		
+		/**
+		 * 是否正在执行不可控动画 
+		 */		
+		private var _intween:Boolean = false;
+		
+		
 		public function BijouView(vo:BijouVO)
 		{
 			_vo = vo;
@@ -27,7 +36,30 @@ package maingame.scene.view
 				init();
 			}
 		}
+		public function get col():int
+		{
+			return _vo.column;
+		}
 		
+		public function get row():int
+		{
+			return _vo.row;
+		}
+		
+		public function get value():int
+		{
+			return _vo.value;
+		}
+		
+		public function get intween():Boolean
+		{
+			return _intween;
+		}
+		
+		public function get vo():BijouVO
+		{
+			return _vo;
+		}
 		/**
 		 * 初始化该宝石 
 		 * @param e

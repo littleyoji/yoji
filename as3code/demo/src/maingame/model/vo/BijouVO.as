@@ -35,6 +35,10 @@ package maingame.model.vo
 		{
 			_view = view;
 		}
+		public function get view():BijouView
+		{
+			return _view;
+		}
 		public function set value(value:int):void
 		{
 			_value = value;
