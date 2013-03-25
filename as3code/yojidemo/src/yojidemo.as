@@ -21,6 +21,7 @@ package
 	import flash.utils.Timer;
 	
 	import mat.Grid;
+	import mat.PlayerVo;
 	
 	[SWF(width ="380",height="580",frameRate="30",backgroundColor ="0xffffff")]
 	public class yojidemo extends Sprite
@@ -29,54 +30,35 @@ package
 		
 		private var _grid:Grid;
 		
-		private var _player_1_hp:int = 150;
-		private var _player_2_hp:int = 210;
-		private var _player_1_max_hp:int = 150;
-		private var _player_2_max_hp:int = 210;
+		private var _player_1_data:Object = {
+			'hp':150,
+			'max_hp':150,
+			'skill_list':[1,2,3,4,5],
+			'atk':10,
+			'def':12,
+			'action_wait':0,
+			'cob_base_limit':5,
+			'cob_effect':0.4
+		};
 		
-		private var _player_1_skill_list:Array = [{skillId:1,skillLv:1},{skillId:2,skillLv:1},{skillId:3,skillLv:1},{skillId:4,skillLv:1},{skillId:5,skillLv:1}];
-		private var _player_2_skill_list:Array = [{skillId:1,skillLv:1},{skillId:2,skillLv:1}];
-		
-		private var _player_1_atk:int = 10;
-		private var _arr_wait_skills:Array;
-		/**
-		 * 敌人行动时间 
-		 */		
-		private var _player_2_action_limit:Number = 10;
-		
-		
-		private var _skill_config:Dictionary;
-		private const _config_skill:Array = 
-			[
-				{skillId:1,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:2,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:3,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:4,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:5,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:100,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				{skillId:101,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1},
-				
-			];
+		private var _player_2_data:Object = {
+			'hp':570,
+			'max_hp':570,
+			'skill_list':[5],
+			'atk':5,
+			'def':18,
+			'action_wait':10,
+			'cob_base_limit':5,
+			'cob_effect':0.4
+		};
+		private var _player_1:PlayerVo;
+		private var _player_2:PlayerVo;
 		
 		/**
-		 * 连招等待时间 
-		 */		
-		private var _player_1_cob_limit:Number = 5;
-		
-		
-		/**
-		 * 角色1连招当前时间 
-		 */		
-		private var _player_1_cob_now:Number = 0;
-		/**
-		 * 连招消除增益 
-		 */		
-		private var _player_1_cob_buffer:Number = 0.4;
-		
-		/**
-		 * 监测时间片 
+		 * 檢測時間碎片，單位秒 
 		 */		
 		private var _player_1_cob_cost:Number = 0.1;
+		
 		private var _now_1:int = 0;
 		private var _now_2:int = 0;
 		private var _now_3:int = 0;
@@ -88,14 +70,17 @@ package
 		private var _cube_4_max:int = 10;
 		private var _cube_5_max:int = 10;
 		
+		/**
+		 * 等待發動技能列表 
+		 */		
+		private var _arr_wait_skills:Array;
 		private var _in_skill_ready:Boolean = false;
 		
 		private var _power:Number = 1;
-		
-		private var _powerScale:Number = 0.01;
-		
-		
-		private var _player_1_cob_timer:Timer;
+		/**
+		 * 蓄力倒計時計時器
+		 */		
+		private var _cob_timer:Timer;
 		public function yojidemo()
 		{
 			if(stage)
@@ -116,11 +101,10 @@ package
 		{
 			_game = new frame();
 			this.addChild(_game);
-			_player_1_cob_timer = new Timer(1000*_player_1_cob_cost,0);
-			import com.greensock.layout.*;
+			_cob_timer = new Timer(1000*_player_1_cob_cost,0);
+			
 			stage.align = StageAlign.BOTTOM;
-			_game.mc_actor_1.gotoAndPlay('act_1');
-			_game.mc_actor_2.gotoAndPlay('act_1');
+			
 			
 			_game.txt_hp_1.autoSize = TextFieldAutoSize.LEFT;
 			_game.txt_hp_2.autoSize = TextFieldAutoSize.RIGHT;
@@ -132,16 +116,9 @@ package
 			
 			_game.txt_power.visible =false;
 			_game.mc_cob_bar.visible = false;
-			//装载游戏数据
-			_player_1_max_hp = _player_1_max_hp;
-			_player_2_max_hp = _player_2_max_hp;
-			player_1_hp = _player_1_hp;
-			player_2_hp = _player_2_hp;
-			cube_1_value = 0;
-			cube_2_value = 0;
-			cube_3_value = 0;
-			cube_4_value = 0;
-			cube_5_value = 0;
+			
+			initData();
+			
 			_grid = new Grid(_game.mc_canvas,this);
 			_grid.set_size(5,5);
 			_grid.createMap();
@@ -150,54 +127,25 @@ package
 			trace(Multitouch.supportsGestureEvents);
 			flash.ui.Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 		}
-		/**
-		 * 设置玩家1的生命值 
-		 * @param value
-		 * 
-		 */		
-		public function set player_1_hp(value:int):void
+		
+		private function initData():void
 		{
-			_player_1_hp = value;
-			var toWidth:Number = _player_1_hp/_player_1_max_hp * 112;
+			_player_1 = new PlayerVo(_player_1_data,_game.mc_actor_1,_game.txt_hp_1);
+			_player_2 = new PlayerVo(_player_2_data,_game.mc_actor_2,_game.txt_hp_2);
 			
-			TweenLite.to(_game.mc_bar_1,0.4,{'width':toWidth});
+			_player_1.showAction('stand');
+			_player_2.showAction('stand');
+			_player_1.player_maxhp = _player_1.max_hp;
+			_player_2.player_maxhp = _player_2.max_hp;
+			_player_1.player_hp = _player_1.hp;
+			_player_1.player_hp = _player_2.hp;
+			cube_1_value = 0;
+			cube_2_value = 0;
+			cube_3_value = 0;
+			cube_4_value = 0;
+			cube_5_value = 0;
+		}
 
-			_game.txt_hp_1.text = _player_1_hp + "/" +_player_1_max_hp;
-		}
-		/**
-		 *  
-		 * @param value
-		 * 
-		 */		
-		public function set player_1_maxhp(value:int):void
-		{
-			_player_1_max_hp = value;
-			var toWidth:Number = _player_1_hp/_player_1_max_hp * 112;
-			TweenLite.to(_game.mc_bar_1,0.4,{'width':toWidth});
-			_game.txt_hp_1.text = _player_1_hp + "/" +_player_1_max_hp;
-		}
-		
-		/**
-		 * 设置玩家2的生命值 
-		 * @param value
-		 * 
-		 */		
-		public function set player_2_hp(value:int):void
-		{
-			_player_2_hp = value;
-			var toWidth:Number = _player_2_hp/_player_2_max_hp * 112;
-			TweenLite.to(_game.mc_bar_2,0.4,{'width':toWidth});
-			_game.txt_hp_2.text = _player_2_hp + "/" +_player_2_max_hp;
-		}
-		
-		public function set player_2_maxhp(value:int):void
-		{
-			_player_2_max_hp = value;
-			var toWidth:Number = _player_2_hp/_player_2_max_hp * 112;
-			TweenLite.to(_game.mc_bar_1,0.4,{'width':toWidth});
-			_game.txt_hp_1.text = _player_2_hp + "/" +_player_2_max_hp;
-		}
-		
 		public function set cube_1_value(value:int):void
 		{
 			_now_1 = value;
@@ -248,14 +196,14 @@ package
 			}
 			if(_in_skill_ready)
 			{
-				_game.mc_actor_1.gotoAndPlay('act_2');
+				_player_1.showAction('power');
 				_game.txt_power.visible = true;
 				
 				_game.mc_cob_bar.scaleX = 1;
 				_game.mc_cob_bar.visible =true;
-				_player_1_cob_now = 0;
-				_player_1_cob_timer.addEventListener(TimerEvent.TIMER,addPowerPerTimer);
-				_player_1_cob_timer.start();
+				_player_1.cob_now_time = 0;
+				_cob_timer.addEventListener(TimerEvent.TIMER,addPowerPerTimer);
+				_cob_timer.start();
 			}
 			return _in_skill_ready;
 		}
@@ -266,7 +214,7 @@ package
 		 */		
 		private function castSkill():void
 		{
-			//TODO: 继续增加内容
+			
 			_in_skill_ready = false;
 			
 			//TODO: 处理技能释放计算伤害
@@ -274,13 +222,13 @@ package
 			for(var i:int=0;i<_arr_wait_skills.length;i++)
 			{
 				var cost:int = this['_now_'+_arr_wait_skills[i]];
-				var now_damage:Number = _power*(cost/this['_cube_'+_arr_wait_skills[i]+'_max']*_player_1_atk);
+				var now_damage:Number = _power*(cost/this['_cube_'+_arr_wait_skills[i]+'_max']*_player_1.atk);
 				this['cube_'+_arr_wait_skills[i]+'_value'] = 0;
 				now_damage = Math.ceil(now_damage);
 				damage.push(now_damage);
 			}
 			damagePlayer2(damage);
-			_power = 1;
+			_power = _player_1.power;
 			_game.txt_power.visible =false;
 			
 			_game.mc_actor_1.gotoAndPlay('act_3');
@@ -294,7 +242,7 @@ package
 			{
 				total += arr[i];
 			}
-			player_2_hp = _player_2_hp- total;
+			_player_2.player_hp = _player_2.hp- total;
 		}
 		/**
 		 * 蓄力模式下积累技能条 
@@ -303,10 +251,10 @@ package
 		 */		
 		private function addPower(value:int):void
 		{
-			_power +=value*_powerScale;
+			_power +=value*_player_1.powerScale;
 			_game.txt_power.text = Math.ceil(_power*100)+'%Power!!';
-			_player_1_cob_now -= _player_1_cob_buffer;
-			_game.mc_cob_bar.scaleX = (_player_1_cob_limit-_player_1_cob_now)/_player_1_cob_limit;
+			_player_1.cob_now_time -= _player_1.cob_effect;
+			_game.mc_cob_bar.scaleX = (_player_1.cob_base_limit-_player_1.cob_now_time)/_player_1.cob_base_limit;
 		}
 		
 		/**
@@ -316,20 +264,20 @@ package
 		 */		
 		private function addPowerPerTimer(e:TimerEvent):void
 		{
-			if(_player_1_cob_now >_player_1_cob_limit)
+			if(_player_1.cob_now_time >_player_1.cob_base_limit)
 			{
 				//释放技能，并中止
-				_player_1_cob_timer.removeEventListener(TimerEvent.TIMER,addPowerPerTimer);
-				_player_1_cob_timer.stop();
-				_player_1_cob_timer.reset();
+				_cob_timer.removeEventListener(TimerEvent.TIMER,addPowerPerTimer);
+				_cob_timer.stop();
+				_cob_timer.reset();
 				_game.mc_cob_bar.visible = false;
 				castSkill();
 				return;
 			}else
 			{
-				_player_1_cob_now+= _player_1_cob_cost;
+				_player_1.cob_now_time+= _player_1_cob_cost;
 				TweenLite.to(_game.mc_cob_bar,_player_1_cob_cost,{
-					scaleX:(_player_1_cob_limit-_player_1_cob_now)/_player_1_cob_limit
+					scaleX:(_player_1.cob_base_limit-_player_1.cob_now_time)/_player_1.cob_base_limit
 				});
 			}
 		}
