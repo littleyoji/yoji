@@ -1,6 +1,7 @@
 package mat
 {
 	import com.greensock.TweenLite;
+	import com.greensock.data.TweenLiteVars;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -69,7 +70,7 @@ package mat
 		/**
 		 * 游戏中出现的宝石 
 		 */		
-		private var _bijou_used:Array = [1,2,3,4];
+		private var _bijou_used:Array = [1,2,3,4,5];
 		public function Grid(mc_canvas:gridview,game:yojidemo)
 		{
 			this._mc_canvas = mc_canvas;
@@ -81,7 +82,16 @@ package mat
 			_update_timer.addEventListener(TimerEvent.TIMER_COMPLETE,updateOverHandler);
 			
 		}
-		
+		/**
+		 * 加锁 
+		 * @param islock
+		 * 
+		 */		
+		public function lock(islock:Boolean=true):void
+		{
+			//_mc_canvas.mc_mask.visible = islock;
+			workAbleScene(!islock);
+		}
 		public function get row_max():int
 		{
 			return _row_max;
@@ -110,7 +120,6 @@ package mat
 		
 		private function moveHandler(e:MouseEvent):void
 		{
-			e.stopPropagation();
 			if(_selected_cube!=null&&_move_able!=0)
 			{
 				var current:Sprite = e.currentTarget as Sprite;
@@ -160,10 +169,23 @@ package mat
 				if(_target_cube!=null&&_target_cube!=_selected_cube)
 				{
 					//确认发生移动，并将移动者加入复原队列
+					if(_target_cube.intween)
+					{
+						return;
+					}
 					_move_able--;
-					if()
 					_arr_line_list.push({'cube':_target_cube,'col':_target_cube.col,'row':_target_cube.row});
 					changePosition(_selected_cube,_target_cube);
+					if(_move_able==0)
+					{
+						if(checkDelete())
+						{
+							clear();
+						}else
+						{
+							returnOrigin();
+						}
+					}
 				}
 			}
 		}
@@ -172,13 +194,7 @@ package mat
 		{
 			e.stopPropagation();
 			
-			if(checkDelete())
-			{
-				clear();
-			}else
-			{
-				returnOrigin();
-			}
+			
 		}
 		
 		
@@ -257,6 +273,16 @@ package mat
 					_move_able--;
 					_arr_line_list.push({'cube':_target_cube,'col':_target_cube.col,'row':_target_cube.row});
 					changePosition(_selected_cube,_target_cube);
+					if(_move_able==0)
+					{
+						if(checkDelete())
+						{
+							clear();
+						}else
+						{
+							returnOrigin();
+						}
+					}
 				}
 			}
 		}
@@ -264,14 +290,6 @@ package mat
 		private function upTouchHandler(e:TouchEvent):void
 		{
 			e.stopPropagation();
-			
-			if(checkDelete())
-			{
-				clear();
-			}else
-			{
-				returnOrigin();
-			}
 		}
 		
 		/**
@@ -324,7 +342,7 @@ package mat
 					}	
 				}
 				//一列循环结束,检测是否有满足
-				if(arr_temp.length>=3)
+				if(arr_temp.length>=_clear_num)
 				{	
 					_arr_clear_list.push(arr_temp);
 					for each(obj in arr_temp)
@@ -451,7 +469,6 @@ package mat
 						var needcreate:Boolean = true;
 						for(var i:int = row;i>=0;i--)
 						{
-							
 							if(_map_cube[col][i]!=null)
 							{
 								//发生一次剪切式位移
@@ -510,7 +527,11 @@ package mat
 				cube.position(toCol,toRow);
 				TweenLite.to(cube,0.3,{
 					x:toCol*CubeVo.cube_size,
-					y:toRow*CubeVo.cube_size
+					y:toRow*CubeVo.cube_size,
+					onComplete:function():void
+					{
+						cube.intween = false;
+					}
 				});
 			}
 		}
@@ -604,11 +625,12 @@ package mat
 			}else
 			{
 				_update_over = true;
-				if(_update_over)
-				{
-					workAbleScene(true);
-				}
-				_game.activeSkill();
+//				if(_update_over)
+//				{
+//					workAbleScene(true);
+//				}
+				workAbleScene(true);
+				_game.playerActiveSkill();
 			}
 		}
 		

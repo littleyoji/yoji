@@ -22,23 +22,27 @@ package
 	
 	import mat.Grid;
 	import mat.PlayerVo;
+	import mat.SkillManager;
 	
-	[SWF(width ="380",height="580",frameRate="30",backgroundColor ="0xffffff")]
+	[SWF(width ="380",height="580",frameRate="24",backgroundColor ="0xffffff")]
 	public class yojidemo extends Sprite
 	{
 		private var _game:frame;
 		
 		private var _grid:Grid;
 		
+		private var _sound:battle;
 		private var _player_1_data:Object = {
 			'hp':150,
 			'max_hp':150,
 			'skill_list':[1,2,3,4,5],
 			'atk':10,
 			'def':12,
+			'power':1,
 			'action_wait':0,
 			'cob_base_limit':5,
-			'cob_effect':0.4
+			'cob_effect':0.4,
+			'powerScale':0.01
 		};
 		
 		private var _player_2_data:Object = {
@@ -47,9 +51,11 @@ package
 			'skill_list':[5],
 			'atk':5,
 			'def':18,
+			'power':1,
 			'action_wait':10,
 			'cob_base_limit':5,
-			'cob_effect':0.4
+			'cob_effect':0.4,
+			'powerScale':0.01
 		};
 		private var _player_1:PlayerVo;
 		private var _player_2:PlayerVo;
@@ -117,28 +123,33 @@ package
 			_game.txt_power.visible =false;
 			_game.mc_cob_bar.visible = false;
 			
+			_sound = new battle();
+			
 			initData();
 			
 			_grid = new Grid(_game.mc_canvas,this);
-			_grid.set_size(5,5);
+			_grid.set_size(6,6);
 			_grid.createMap();
 			_arr_wait_skills = [];
 			trace(Multitouch.supportsTouchEvents);
 			trace(Multitouch.supportsGestureEvents);
 			flash.ui.Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
+			
+			_sound.play(0,int.MAX_VALUE);
 		}
 		
 		private function initData():void
 		{
-			_player_1 = new PlayerVo(_player_1_data,_game.mc_actor_1,_game.txt_hp_1);
-			_player_2 = new PlayerVo(_player_2_data,_game.mc_actor_2,_game.txt_hp_2);
+			
+			_player_1 = new PlayerVo(_player_1_data,_game.mc_actor_1,_game.mc_bar_1,_game.txt_hp_1);
+			_player_2 = new PlayerVo(_player_2_data,_game.mc_actor_2,_game.mc_bar_2,_game.txt_hp_2);
 			
 			_player_1.showAction('stand');
 			_player_2.showAction('stand');
 			_player_1.player_maxhp = _player_1.max_hp;
 			_player_2.player_maxhp = _player_2.max_hp;
 			_player_1.player_hp = _player_1.hp;
-			_player_1.player_hp = _player_2.hp;
+			_player_2.player_hp = _player_2.hp;
 			cube_1_value = 0;
 			cube_2_value = 0;
 			cube_3_value = 0;
@@ -179,7 +190,7 @@ package
 		 * 消除结束后进入技能预备阶段
 		 * 
 		 */		
-		public function activeSkill():Boolean
+		public function playerActiveSkill():Boolean
 		{
 			//TODO: 检查宝石数量，是否超过10,若已超过进入蓄力模式
 			if(_in_skill_ready)
@@ -212,38 +223,46 @@ package
 		 * 释放技能 
 		 * 
 		 */		
-		private function castSkill():void
+		private function castSkill(player:PlayerVo,target:PlayerVo):void
 		{
 			
 			_in_skill_ready = false;
 			
 			//TODO: 处理技能释放计算伤害
-			var damage:Array = [];
+			var arr_skills:Array = [];
 			for(var i:int=0;i<_arr_wait_skills.length;i++)
 			{
 				var cost:int = this['_now_'+_arr_wait_skills[i]];
-				var now_damage:Number = _power*(cost/this['_cube_'+_arr_wait_skills[i]+'_max']*_player_1.atk);
+				var now_cost:Number = _power*(cost/this['_cube_'+_arr_wait_skills[i]+'_max']);
 				this['cube_'+_arr_wait_skills[i]+'_value'] = 0;
-				now_damage = Math.ceil(now_damage);
-				damage.push(now_damage);
+				now_cost = Math.ceil(now_cost);
+				arr_skills.push({'skill':_player_1.skill_list[_arr_wait_skills[i]-1],'cost':now_cost});
 			}
-			damagePlayer2(damage);
+			SkillManager.instanse.showSkill(_player_1,_player_2,arr_skills,skillCastCallBack);
+			
 			_power = _player_1.power;
 			_game.txt_power.visible =false;
-			
-			_game.mc_actor_1.gotoAndPlay('act_3');
+			_grid.lock(true);
+		}
+		/**
+		 * 玩家技能播放完毕 
+		 * 
+		 */		
+		private function skillCastCallBack():void
+		{
+			_grid.lock(false);
 		}
 		
-		private function damagePlayer2(arr:Array):void
-		{
-			var total:int = 0;
-			var timeline:TimelineLite = new TimelineLite();
-			for(var i:int = 0;i<arr.length;i++)
-			{
-				total += arr[i];
-			}
-			_player_2.player_hp = _player_2.hp- total;
-		}
+//		private function damagePlayer2(arr:Array):void
+//		{
+//			var total:int = 0;
+//			var timeline:TimelineLite = new TimelineLite();
+//			for(var i:int = 0;i<arr.length;i++)
+//			{
+//				total += arr[i];
+//			}
+//			_player_2.player_hp = _player_2.hp- total;
+//		}
 		/**
 		 * 蓄力模式下积累技能条 
 		 * @param value
@@ -271,7 +290,7 @@ package
 				_cob_timer.stop();
 				_cob_timer.reset();
 				_game.mc_cob_bar.visible = false;
-				castSkill();
+				castSkill(_player_1,_player_2);
 				return;
 			}else
 			{

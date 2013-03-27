@@ -1,9 +1,10 @@
 package mat
 {
 	import com.greensock.TweenLite;
+	import com.greensock.data.TweenLiteVars;
 	
 	import flash.text.TextField;
-
+	
 	public class PlayerVo
 	{
 		/**
@@ -93,9 +94,33 @@ package mat
 		 */		
 		public function showDamage(arr:Array):void
 		{
-			
+			var total:int = 0;
+			for(var i:int =0;i<arr.length;i++)
+			{
+				total += arr[i];
+			}
+			TweenLite.to(_view,0.3,
+				{
+					delay:0.5,
+					onComplete:function():void
+						{
+							if(total>=hp)
+							{
+								player_hp = 0;
+								showAction('dead');
+							}else
+							{
+								player_hp = hp-total;
+								showAction('stand');
+							}
+						}
+				}
+			);
 		}
-		
+		public function get view():Role
+		{
+			return _view;
+		}
 		public function set player_hp(value:int):void
 		{
 			hp = value;
@@ -129,7 +154,11 @@ package mat
 			cob_now_time = 0;
 			power = data.power;
 			powerScale = data.powerScale;
-			
+			skill_list = new Vector.<SkillVo>();
+			for(var i:int =0 ;i<data.skill_list.length;i++)
+			{
+				skill_list.push(SkillManager.instanse.getSkillById(data.skill_list[i]));
+			}
 			_view = actor;
 			_hp_bar = hpbar;
 			_hp_text = txt;
