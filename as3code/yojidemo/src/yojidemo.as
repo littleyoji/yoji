@@ -1,19 +1,13 @@
 package
 {
-	import com.greensock.TimelineLite;
+	
 	import com.greensock.TweenLite;
-	import com.greensock.data.TweenLiteVars;
-	import com.greensock.events.TweenEvent;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
-	import flash.display3D.IndexBuffer3D;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
-	import flash.events.TouchEvent;
-	import flash.system.System;
-	import flash.system.TouchscreenType;
-	import flash.text.TextField;
+	import flash.media.SoundTransform;
 	import flash.text.TextFieldAutoSize;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
@@ -23,8 +17,9 @@ package
 	import mat.Grid;
 	import mat.PlayerVo;
 	import mat.SkillManager;
+	import mat.SkillVo;
 	
-	[SWF(width ="380",height="580",frameRate="24",backgroundColor ="0xffffff")]
+	[SWF(width ="640",height="1080",frameRate="24",backgroundColor ="0xffffff")]
 	public class yojidemo extends Sprite
 	{
 		private var _game:frame;
@@ -35,13 +30,13 @@ package
 		private var _player_1_data:Object = {
 			'hp':150,
 			'max_hp':150,
-			'skill_list':[1,2,3,4,5],
+			'skill_list':[1,2,3,4,5,"atk"],
 			'atk':10,
 			'def':12,
 			'power':1,
 			'action_wait':0,
 			'cob_base_limit':5,
-			'cob_effect':0.4,
+			'cob_effect':0,
 			'powerScale':0.01
 		};
 		
@@ -70,12 +65,15 @@ package
 		private var _now_3:int = 0;
 		private var _now_4:int = 0;
 		private var _now_5:int = 0;
+		private var _cube_0_max:int = 0;
 		private var _cube_1_max:int = 10;
 		private var _cube_2_max:int = 10;
 		private var _cube_3_max:int = 10;
 		private var _cube_4_max:int = 10;
 		private var _cube_5_max:int = 10;
-		
+		private var _mainPlayer:PlayerVo;
+		private var _mainPlayer_skills:Dictionary;
+		private var _otherPlayer:PlayerVo;
 		/**
 		 * 等待發動技能列表 
 		 */		
@@ -87,6 +85,8 @@ package
 		 * 蓄力倒計時計時器
 		 */		
 		private var _cob_timer:Timer;
+		
+		private var _soundtrans:SoundTransform;
 		public function yojidemo()
 		{
 			if(stage)
@@ -124,9 +124,9 @@ package
 			_game.mc_cob_bar.visible = false;
 			
 			_sound = new battle();
-			
+			_soundtrans = new SoundTransform(0.5);
 			initData();
-			
+			setMainPlayer();
 			_grid = new Grid(_game.mc_canvas,this);
 			_grid.set_size(6,6);
 			_grid.createMap();
@@ -135,7 +135,10 @@ package
 			trace(Multitouch.supportsGestureEvents);
 			flash.ui.Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
-			_sound.play(0,int.MAX_VALUE);
+			_sound.play(0,int.MAX_VALUE,_soundtrans);
+			
+			
+			_game.mc_mask.visible = false;
 		}
 		
 		private function initData():void
@@ -146,17 +149,41 @@ package
 			
 			_player_1.showAction('stand');
 			_player_2.showAction('stand');
+			
 			_player_1.player_maxhp = _player_1.max_hp;
 			_player_2.player_maxhp = _player_2.max_hp;
 			_player_1.player_hp = _player_1.hp;
 			_player_2.player_hp = _player_2.hp;
+			
+		}
+		private function setMainPlayer():void
+		{
+			_mainPlayer= _player_1;
+			_mainPlayer_skills = new Dictionary();
+//			for(var skill:SkillVo in _mainPlayer.skill_list)
+//			{
+//				if(this.hasOwnProperty('_cube_'+skill.value+'_max'))
+//				{
+//					this['_cube_'+skill.value+'_max'] = skill.maxBijou;
+//					_mainPlayer_skills[skill.value] = skill;
+//				}
+//			}
+			for(var key:* in _mainPlayer.skill_list)
+			{
+				var skill:SkillVo = _mainPlayer.skill_list[key];
+				if(this['_cube_'+skill.value+'_max']!=null)
+				{
+					this['_cube_'+skill.value+'_max'] = skill.maxBijou;
+					_mainPlayer_skills[skill.value] = skill;
+				}
+			}
 			cube_1_value = 0;
 			cube_2_value = 0;
 			cube_3_value = 0;
 			cube_4_value = 0;
 			cube_5_value = 0;
+			_otherPlayer = _player_2;
 		}
-
 		public function set cube_1_value(value:int):void
 		{
 			_now_1 = value;
@@ -201,7 +228,7 @@ package
 			{
 				if(this['_now_'+i]>this['_cube_'+i+'_max'])
 				{
-					_arr_wait_skills.push(i);
+					_arr_wait_skills.push(_mainPlayer_skills[i].id);
 					_in_skill_ready = true;
 				}
 			}
@@ -236,13 +263,16 @@ package
 				var now_cost:Number = _power*(cost/this['_cube_'+_arr_wait_skills[i]+'_max']);
 				this['cube_'+_arr_wait_skills[i]+'_value'] = 0;
 				now_cost = Math.ceil(now_cost);
-				arr_skills.push({'skill':_player_1.skill_list[_arr_wait_skills[i]-1],'cost':now_cost});
+				arr_skills.push({'skill':_mainPlayer_skills[_arr_wait_skills[i]],'cost':now_cost});
 			}
 			SkillManager.instanse.showSkill(_player_1,_player_2,arr_skills,skillCastCallBack);
 			
+			_soundtrans.volume = 0.2;
+			_sound.soundTransform = _soundtrans;
 			_power = _player_1.power;
 			_game.txt_power.visible =false;
 			_grid.lock(true);
+			//_game.mc_mask.visible = true;
 		}
 		/**
 		 * 玩家技能播放完毕 
@@ -251,6 +281,9 @@ package
 		private function skillCastCallBack():void
 		{
 			_grid.lock(false);
+			_soundtrans.volume = 1;
+			_sound.soundTransform = _soundtrans;
+			//_game.mc_mask.visible = false;
 		}
 		
 //		private function damagePlayer2(arr:Array):void
@@ -300,18 +333,49 @@ package
 				});
 			}
 		}
+		
+		/**
+		 *  
+		 * @param value
+		 * 
+		 */		
+		private function attack(value):void
+		{
+			//TODO: 发动攻击动作
+			var arr_skills:Array = [];
+			
+			arr_skills.push({'skill':_player_1.skill_list['atk'],'cost':value});
+			SkillManager.instanse.showSkill(_player_1,_player_2,arr_skills,null);
+			
+		}
 		/**
 		 * 获得了多少颗什么宝石 
 		 * 
 		 */
-		public function awardBijou(index:int,value:int):void
+		public function awardBijou(arr_bijou:Array):void
 		{
 			if(_in_skill_ready)
 			{
+				var value:int = 0;
+				for(var i:int=0;i<arr_bijou;i++)
+				{
+					value +=arr_bijou[i].value;
+				}
 				addPower(value);
 			}else
 			{
-				this['cube_'+index+'_value'] = this['_now_'+index] + value;
+				for(i=0;i<arr_bijou.length;i++)
+				{
+					this['cube_'+arr_bijou[i].index+'_value'] = this['_now_'+arr_bijou[i].index] + arr_bijou[i].value;
+					value +=arr_bijou[i].value;
+				}
+				if(playerActiveSkill())
+				{
+					
+				}else
+				{
+					attack(value);
+				}
 			}
 		}
 	}

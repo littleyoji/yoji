@@ -9,7 +9,7 @@ package mat
 	
 	public class CubeVo extends Sprite
 	{
-		public static const cube_size:Number = 43;
+		public static const cube_size:Number = 92;
 		/**
 		 * 该资源的视图信息 
 		 */		

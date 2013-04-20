@@ -1,7 +1,7 @@
 package mat
 {
 	import com.greensock.TweenLite;
-	import com.greensock.data.TweenLiteVars;
+	import com.greensock.easing.Elastic;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -58,11 +58,11 @@ package mat
 		/**
 		 * 该容器宽度 
 		 */		
-		private const _width:Number = 344;
+		private const _width:Number = 640;
 		/**
 		 * 该容器高度 
 		 */		
-		private const _height:Number = 344;
+		private const _height:Number = 640;
 		
 		private var _clear_num:int = 3;
 		private var _selected_cube:CubeVo;
@@ -175,16 +175,13 @@ package mat
 					}
 					_move_able--;
 					_arr_line_list.push({'cube':_target_cube,'col':_target_cube.col,'row':_target_cube.row});
-					changePosition(_selected_cube,_target_cube);
+					
 					if(_move_able==0)
 					{
-						if(checkDelete())
-						{
-							clear();
-						}else
-						{
-							returnOrigin();
-						}
+						changePosition(_selected_cube,_target_cube,balance);
+					}else
+					{
+						changePosition(_selected_cube,_target_cube);
 					}
 				}
 			}
@@ -193,11 +190,19 @@ package mat
 		private function upHandler(e:MouseEvent):void
 		{
 			e.stopPropagation();
-			
-			
 		}
 		
-		
+		private function balance():void
+		{
+			
+			if(checkDelete())
+			{
+				clear();
+			}else
+			{
+				returnOrigin();
+			}
+		}
 		
 		private function startTouchHandler(e:TouchEvent):void
 		{
@@ -272,17 +277,14 @@ package mat
 					}
 					_move_able--;
 					_arr_line_list.push({'cube':_target_cube,'col':_target_cube.col,'row':_target_cube.row});
-					changePosition(_selected_cube,_target_cube);
 					if(_move_able==0)
 					{
-						if(checkDelete())
-						{
-							clear();
-						}else
-						{
-							returnOrigin();
-						}
+						changePosition(_selected_cube,_target_cube,balance);
+					}else
+					{
+						changePosition(_selected_cube,_target_cube);
 					}
+					
 				}
 			}
 		}
@@ -499,14 +501,14 @@ package mat
 		 * @param toCube
 		 * 
 		 */		
-		private function changePosition(cube:CubeVo,toCube:CubeVo):void
+		private function changePosition(cube:CubeVo,toCube:CubeVo,callback:Function=null):void
 		{
 			var toRow:int = toCube.row;
 			var toCol:int = toCube.col;
 			var col:int = cube.col;
 			var row:int = cube.row;
 			
-			moveCube(cube,toCol,toRow);
+			moveCube(cube,toCol,toRow,callback);
 			
 			moveCube(toCube,col,row);
 		}
@@ -518,20 +520,25 @@ package mat
 		 * @param toRow
 		 * 
 		 */		
-		private function moveCube(cube:CubeVo,toCol:int,toRow:int):void
+		private function moveCube(cube:CubeVo,toCol:int,toRow:int,callback:Function=null):void
 		{
 			_map_cube[toCol][toRow] = cube;
 			if(cube!=null)
 			{
 				cube.intween = true;
 				cube.position(toCol,toRow);
-				TweenLite.to(cube,0.3,{
+				TweenLite.to(cube,0.7,{
 					x:toCol*CubeVo.cube_size,
 					y:toRow*CubeVo.cube_size,
 					onComplete:function():void
 					{
 						cube.intween = false;
-					}
+						if(callback!=null)
+						{
+							callback();
+						}
+					},
+					ease:Elastic.easeOut
 				});
 			}
 		}
@@ -575,13 +582,15 @@ package mat
 		private function clear():void
 		{
 			workAbleScene(false);
+			var _arr_clear_value:Array = [];
 			//TODO:应采取锁屏策略，并通知场景开始消除
 			for(var i:int = 0;i<_arr_clear_list.length;i++)
 			{
 				var arr:Array = _arr_clear_list[i];
-				var value:int = arr[0].value;
+				var index:int = arr[0].value;
 				var num:int = arr.length;
-				_game.awardBijou(value,num);
+				_arr_clear_value.push({index:index,value:num});
+				
 				for(var j:int =0;j<arr.length;j++)
 				{
 					var cube:CubeVo = arr[j];
@@ -589,6 +598,7 @@ package mat
 					cube.dispose();
 				}
 			}
+			_game.awardBijou(_arr_clear_value);
 			_arr_clear_list = null;
 			_dic_clear_cube = null;
 			_selected_cube = null;
@@ -625,12 +635,11 @@ package mat
 			}else
 			{
 				_update_over = true;
-//				if(_update_over)
-//				{
-//					workAbleScene(true);
-//				}
+				//				if(_update_over)
+				//				{
+				//					workAbleScene(true);
+				//				}
 				workAbleScene(true);
-				_game.playerActiveSkill();
 			}
 		}
 		
@@ -653,14 +662,14 @@ package mat
 			{
 				if(Multitouch.supportsTouchEvents)
 				{
-				_mc_canvas.removeEventListener(TouchEvent.TOUCH_BEGIN,startTouchHandler);
-				_mc_canvas.removeEventListener(TouchEvent.TOUCH_MOVE,moveTouchHandler);
-				_mc_canvas.removeEventListener(TouchEvent.TOUCH_END,upTouchHandler);
+					_mc_canvas.removeEventListener(TouchEvent.TOUCH_BEGIN,startTouchHandler);
+					_mc_canvas.removeEventListener(TouchEvent.TOUCH_MOVE,moveTouchHandler);
+					_mc_canvas.removeEventListener(TouchEvent.TOUCH_END,upTouchHandler);
 				}else
 				{
-				_mc_canvas.removeEventListener(MouseEvent.MOUSE_DOWN,downHandler);
-				_mc_canvas.removeEventListener(MouseEvent.MOUSE_MOVE,moveHandler);
-				_mc_canvas.removeEventListener(MouseEvent.MOUSE_UP,upHandler);
+					_mc_canvas.removeEventListener(MouseEvent.MOUSE_DOWN,downHandler);
+					_mc_canvas.removeEventListener(MouseEvent.MOUSE_MOVE,moveHandler);
+					_mc_canvas.removeEventListener(MouseEvent.MOUSE_UP,upHandler);
 				}
 			}
 		}

@@ -7,6 +7,14 @@ package mat
 		 */		
 		public var id:String;
 		/**
+		 * 对应宝石颜色 
+		 */		
+		public var value:int;
+		/**
+		 * 触发技能宝石数量 
+		 */		
+		public var maxBijou:int;
+		/**
 		 * 攻击力加成 
 		 */		
 		public var atkBuffer:Number;
@@ -37,6 +45,9 @@ package mat
 			defBuffer = obj.defBuffer;
 			atkEffect = obj.atkEffect;
 			defEffect = obj.defEffect;
+			value = obj.value;
+			maxBijou = obj.maxBijou;
+			
 		}
 	}
 }

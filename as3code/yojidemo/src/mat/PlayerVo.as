@@ -4,6 +4,7 @@ package mat
 	import com.greensock.data.TweenLiteVars;
 	
 	import flash.text.TextField;
+	import flash.utils.Dictionary;
 	
 	public class PlayerVo
 	{
@@ -20,7 +21,7 @@ package mat
 		/**
 		 * 技能列表 
 		 */		
-		public var skill_list:Vector.<SkillVo>;
+		public var skill_list:Dictionary;
 		
 		/**
 		 * 攻擊力 
@@ -78,7 +79,7 @@ package mat
 		private var _hp_text:TextField;
 		
 		
-		private const _hp_bar_width:Number = 112;
+		private const _hp_bar_width:Number = 229;
 		public function showAction(act:String):void
 		{
 			if(_view!=null)
@@ -154,10 +155,11 @@ package mat
 			cob_now_time = 0;
 			power = data.power;
 			powerScale = data.powerScale;
-			skill_list = new Vector.<SkillVo>();
+			skill_list = new Dictionary;
 			for(var i:int =0 ;i<data.skill_list.length;i++)
 			{
-				skill_list.push(SkillManager.instanse.getSkillById(data.skill_list[i]));
+				var skill_vo:SkillVo = SkillManager.instanse.getSkillById(data.skill_list[i]);
+				skill_list[skill_vo.id] = skill_vo;
 			}
 			_view = actor;
 			_hp_bar = hpbar;
