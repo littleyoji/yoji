@@ -24,12 +24,12 @@ package mat
 		private static var _this:SkillManager;
 		private const _config_skill:Array = 
 			[
-				{id:1,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'震天',color:1,maxBijou:10},
-				{id:2,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'百万雄蜂',color:2,maxBijou:10},
-				{id:3,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'Power Wave',color:3,maxBijou:10},
-				{id:4,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'灰霭',color:4,maxBijou:10},
-				{id:5,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'Power',color:5,maxBijou:10},
-				{id:'atk',atkEffect:0,defEffect:0,atkBuffer:1,defBuffer:1,name:"普通攻击",color:0,maxBijou:0}
+				{id:1,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'震天',value:1,maxBijou:10},
+				{id:2,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'百万雄蜂',value:2,maxBijou:10},
+				{id:3,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'Power Wave',value:3,maxBijou:10},
+				{id:4,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'灰霭',value:4,maxBijou:10},
+				{id:5,atkEffect:100,defEffect:100,atkBuffer:1.5,defBuffer:1,name:'Power',value:5,maxBijou:10},
+				{id:'atk',atkEffect:0,defEffect:0,atkBuffer:1,defBuffer:1,name:"普通攻击",value:0,maxBijou:0}
 			];
 		
 		public function SkillManager()

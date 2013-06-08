@@ -27,7 +27,6 @@ package
 		private var _grid:Grid;
 		
 		private var _sound:battle;
-		private var _value:int;
 		private var _player_1_data:Object = {
 			'hp':150,
 			'max_hp':150,
@@ -66,16 +65,12 @@ package
 		private var _now_3:int = 0;
 		private var _now_4:int = 0;
 		private var _now_5:int = 0;
-		private var _now_6:int = 0;
-		private var _now_7:int = 0;
 		private var _cube_0_max:int = 0;
 		private var _cube_1_max:int = 10;
 		private var _cube_2_max:int = 10;
 		private var _cube_3_max:int = 10;
 		private var _cube_4_max:int = 10;
 		private var _cube_5_max:int = 10;
-		private var _cube_6_max:int = 0;
-		private var _cube_7_max:int = 0;
 		private var _mainPlayer:PlayerVo;
 		private var _mainPlayer_skills:Dictionary;
 		private var _otherPlayer:PlayerVo;
@@ -115,7 +110,8 @@ package
 			_cob_timer = new Timer(1000*_player_1_cob_cost,0);
 			
 			stage.align = StageAlign.BOTTOM;
-			//Security.allowDomain("*");			
+			
+			
 			_game.txt_hp_1.autoSize = TextFieldAutoSize.LEFT;
 			_game.txt_hp_2.autoSize = TextFieldAutoSize.RIGHT;
 			_game.txt_cube1.autoSize = TextFieldAutoSize.CENTER;
@@ -192,14 +188,6 @@ package
 		{
 			_now_1 = value;
 			_game.txt_cube1.text = _now_1+'/'+_cube_1_max;
-		}
-		public function set cube_6_value(value:int):void
-		{
-			
-		}
-		public function set cube_7_value(value:int):void
-		{
-		
 		}
 		public function set cube_2_value(value:int):void
 		{
@@ -298,6 +286,16 @@ package
 			//_game.mc_mask.visible = false;
 		}
 		
+//		private function damagePlayer2(arr:Array):void
+//		{
+//			var total:int = 0;
+//			var timeline:TimelineLite = new TimelineLite();
+//			for(var i:int = 0;i<arr.length;i++)
+//			{
+//				total += arr[i];
+//			}
+//			_player_2.player_hp = _player_2.hp- total;
+//		}
 		/**
 		 * 蓄力模式下积累技能条 
 		 * @param value
@@ -348,17 +346,7 @@ package
 			
 			arr_skills.push({'skill':_player_1.skill_list['atk'],'cost':value});
 			SkillManager.instanse.showSkill(_player_1,_player_2,arr_skills,null);
-			_value = 0;
-		}
-		public function clearOver():void
-		{
-			if(playerActiveSkill())
-			{
-				
-			}else
-			{
-				attack(_value);
-			}
+			
 		}
 		/**
 		 * 获得了多少颗什么宝石 
@@ -368,21 +356,26 @@ package
 		{
 			if(_in_skill_ready)
 			{
-				_value = 0;
+				var value:int = 0;
 				for(var i:int=0;i<arr_bijou;i++)
 				{
-					_value +=arr_bijou[i].value;
+					value +=arr_bijou[i].value;
 				}
-				addPower(_value);
+				addPower(value);
 			}else
 			{
-				var value:int = 0;
 				for(i=0;i<arr_bijou.length;i++)
 				{
 					this['cube_'+arr_bijou[i].index+'_value'] = this['_now_'+arr_bijou[i].index] + arr_bijou[i].value;
 					value +=arr_bijou[i].value;
 				}
-				_value +=value;
+				if(playerActiveSkill())
+				{
+					
+				}else
+				{
+					attack(value);
+				}
 			}
 		}
 	}
