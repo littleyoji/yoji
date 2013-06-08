@@ -2,7 +2,6 @@ package mat
 {
 	import com.greensock.TweenLite;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.system.ApplicationDomain;
 	import flash.utils.getDefinitionByName;
@@ -84,7 +83,8 @@ package mat
 		{
 			if(index!=0)
 			{
-				var cl:Class = getDefinitionByName('cube'+index) as Class;
+				
+				//var cl:Class = getDefinitionByName('cube'+index) as Class;
 				if(_view!=null)
 				{
 					if(_view.parent!=null)
@@ -92,7 +92,22 @@ package mat
 						this.removeChild(_view);
 					}
 				}
-				_view = new cl();
+				switch(index)
+				{
+					case 1:_view = new cube1();break;
+					case 2:_view = new cube2();break;
+					case 3:_view = new cube3();break;
+					case 4:_view = new cube4();break;
+					case 5:_view = new cube5();break;
+					case 6:_view = new cube6();break;
+					case 7:_view = new cube7();break;
+					default:
+					{
+						break;
+					}
+				}
+				//_view = new cl();
+				
 				this.addChild(_view);
 				_value = index;
 			}
