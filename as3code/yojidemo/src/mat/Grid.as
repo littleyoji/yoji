@@ -33,6 +33,8 @@ package mat
 		
 		private var _clear_timer:Timer;
 		private var _update_timer:Timer;
+		
+		private var _begin_clear:Boolean = false;
 		/**
 		 * 该次移动的被改变位置的所有宝石以及其对应的起点 ，
 		 * 
@@ -70,7 +72,7 @@ package mat
 		/**
 		 * 游戏中出现的宝石 
 		 */		
-		private var _bijou_used:Array = [1,2,3,4,5];
+		private var _bijou_used:Array = [1,2,3,4,5,6];
 		public function Grid(mc_canvas:gridview,game:yojidemo)
 		{
 			this._mc_canvas = mc_canvas;
@@ -197,9 +199,11 @@ package mat
 			
 			if(checkDelete())
 			{
+				_begin_clear = true;
 				clear();
 			}else
 			{
+				_begin_clear = false;
 				returnOrigin();
 			}
 		}
@@ -631,14 +635,17 @@ package mat
 			e.stopPropagation();
 			if(checkDelete())
 			{
+				_begin_clear = true;
 				clear();
 			}else
 			{
 				_update_over = true;
+				_begin_clear = false;
 				//				if(_update_over)
 				//				{
 				//					workAbleScene(true);
 				//				}
+				_game.clearOver();
 				workAbleScene(true);
 			}
 		}
